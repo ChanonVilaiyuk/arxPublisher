@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>arxPublishWindow</class>
+ <widget class="QMainWindow" name="arxPublishWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>749</width>
+    <height>692</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Arxanima Asset Publish v.1.0</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>731</width>
+      <height>661</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
+    <widget class="QLabel" name="app_label">
+     <property name="geometry">
+      <rect>
+       <x>530</x>
+       <y>6</y>
+       <width>190</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Maya Publish</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="frame_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>500</y>
+       <width>341</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <widget class="QTextEdit" name="comment_textEdit">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>321</width>
+        <height>71</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Comment : </string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QCheckBox" name="shotgun_checkBox">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>420</y>
+       <width>70</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string extracomment="Update publish data to Shotgun. Uncheck if cannot connect to Shotgun."/>
+     </property>
+     <property name="whatsThis">
+      <string extracomment="Update publish data to Shotgun"/>
+     </property>
+     <property name="text">
+      <string>Shotgun</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QFrame" name="frame_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>711</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <widget class="QLabel" name="task_label">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>50</y>
+        <width>101</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Task</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="data2_label">
+      <property name="geometry">
+       <rect>
+        <x>260</x>
+        <y>50</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Parent</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="data3_label">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>50</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Variation</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="data1_label">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>50</y>
+        <width>111</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Type</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="project_label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Project</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="entity_label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>191</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Entity type</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="publish_label">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>13</y>
+        <width>491</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Publish version</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>341</width>
+       <height>271</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <widget class="QPushButton" name="snapViewport_pushButton">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>240</y>
+        <width>101</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Snap Viewport</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="preview_label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>300</width>
+        <height>200</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Preview</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="task_label_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>151</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Thumbnail : </string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="publish_pushButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>620</y>
+       <width>161</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Publish</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="frame_5">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>180</y>
+       <width>361</width>
+       <height>431</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <widget class="QListWidget" name="publish_listWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>341</width>
+        <height>391</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="display_label">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>151</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Publish Files : </string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="status_label">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>624</y>
+       <width>541</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="logo_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>6</y>
+       <width>200</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>16</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Logo</string>
+     </property>
+    </widget>
+    <widget class="QFrame" name="frame_6">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>140</y>
+       <width>361</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <widget class="QRadioButton" name="saveWork_radioButton">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>6</y>
+        <width>100</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save increment</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="publish_radioButton">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>6</y>
+        <width>91</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Publish Scene</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QCheckBox" name="playblast_checkBox">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>420</y>
+       <width>131</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string extracomment="Update publish data to Shotgun. Uncheck if cannot connect to Shotgun."/>
+     </property>
+     <property name="whatsThis">
+      <string extracomment="Update publish data to Shotgun"/>
+     </property>
+     <property name="text">
+      <string>Attach playblast to RV</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="upload_checkBox">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>420</y>
+       <width>91</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string extracomment="Update publish data to Shotgun. Uncheck if cannot connect to Shotgun."/>
+     </property>
+     <property name="whatsThis">
+      <string extracomment="Update publish data to Shotgun"/>
+     </property>
+     <property name="text">
+      <string>Upload Online</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

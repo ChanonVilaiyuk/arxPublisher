@@ -1,0 +1,35 @@
+# root for OS
+
+root:{"windowRoot": "U:"}
+rootProject:projects
+
+mediaRoot:{"windowRoot": "V:"}
+
+# increment version prefix and padding
+version:v
+padding:3
+
+# map the project {name_on_disk: name_in_shotgun}
+projectMap:{"ttv":"ttv_assets"}
+
+# shotgun publish status
+publishStatus:wai
+
+# shotgun version status
+versionStatus:rev
+
+# maya file extension
+extension:ma
+
+# playblast extension
+mediaExtension:mov
+
+# snap shot image extension
+# recommend to use only png
+snapShot:png
+
+# logo file
+logo:logo2.png
+
+# application logo
+appLogo:Maya_logo.png
