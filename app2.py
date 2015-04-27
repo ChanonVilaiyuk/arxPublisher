@@ -970,23 +970,29 @@ class MyForm(QtGui.QMainWindow):
 						sgPlayblast = self.playblastVersion['sgPlayblast']
 
 
-						if self.ui.upload_checkBox.isChecked() : 
-							upload = True
+						# only create version if sgPlayblast available
+						if sgPlayblast : 
+							if self.ui.upload_checkBox.isChecked() : 
+								upload = True
 
-						self.setStatusUI('Create version for %s' % entityName, True, True, True)
-						hook.logList(['projName : %s' % projName, 'entityID : %s' % entityID, 'taskID : %s' % taskID, 
-									'name : %s' % name, 'status : %s' % status, 'description : %s' % description, 
-									'publishPath : %s' % hook.convertPath(publishPath), 'version : %s' % version, 'thumbnailPath : %s' % hook.convertPath(thumbnailPath), 
-									'rvPlayblast : %s' % hook.convertPath(rvPlayblast), 'sgPlayblast : %s' % hook.convertPath(sgPlayblast), 'upload : %s' % upload]
-									)
+							self.setStatusUI('Create version for %s' % entityName, True, True, True)
+							hook.logList(['projName : %s' % projName, 'entityID : %s' % entityID, 'taskID : %s' % taskID, 
+										'name : %s' % name, 'status : %s' % status, 'description : %s' % description, 
+										'publishPath : %s' % hook.convertPath(publishPath), 'version : %s' % version, 'thumbnailPath : %s' % hook.convertPath(thumbnailPath), 
+										'rvPlayblast : %s' % hook.convertPath(rvPlayblast), 'sgPlayblast : %s' % hook.convertPath(sgPlayblast), 'upload : %s' % upload]
+										)
 
-						result = sgUtils.sgCreateShotVersion(projName, entityID, taskID, name, status, description, publishPath, version, thumbnailPath, rvPlayblast, sgPlayblast, upload)
-						hook.logList([result])
-						hook.log('Create version success')
-						self.setProgress('%s : Set RV Playbalst' % entityName, 'Skip : No RV playblast for %s' % entityName, rvPlayblast, True, 'na')
-						self.setProgress('%s Upload SG playblast' % entityName, 'Skip : No SG Playblast for %s' % entityName, sgPlayblast, True, 'na')
-						self.setProgressbar(self.progressIncrement, True)
-						# self.setProgress('Create version %s' % entityName, result)
+							result = sgUtils.sgCreateShotVersion2(projName, entityID, taskID, name, status, description, publishPath, version, thumbnailPath, rvPlayblast, sgPlayblast, upload)
+							hook.logList([result])
+							hook.log('Create version success')
+							self.setProgress('%s : Set RV Playbalst' % entityName, 'Skip : No RV playblast for %s' % entityName, rvPlayblast, True, 'na')
+							self.setProgress('%s Upload SG playblast' % entityName, 'Skip : No SG Playblast for %s' % entityName, sgPlayblast, True, 'na')
+							self.setProgressbar(self.progressIncrement, True)
+							# self.setProgress('Create version %s' % entityName, result)
+
+						else : 
+							self.setProgress('%s : Set RV Playbalst' % entityName, 'Skip : No create version %s' % entityName, False, True, 'na')
+
 
 
 			if self.info['department'] == 'layout' : 
@@ -1006,7 +1012,7 @@ class MyForm(QtGui.QMainWindow):
 							if each['rvExists'] : 
 								name = os.path.basename(each['rvPlayblast']).replace('.%s' % mediaExt, '')
 								rvPlayblast = each['rvPlayblast']
-								createVersion = True
+								createVersion = False
 
 							if each['sgExists'] : 
 								sgPlayblast = each['sgPlayblast']
@@ -1024,7 +1030,7 @@ class MyForm(QtGui.QMainWindow):
 											'sgPlayblast : %s' % hook.convertPath(sgPlayblast), 'upload : %s' % upload]
 											)
 
-								result = sgUtils.sgCreateShotVersion(projName, entityID, taskID, name, status, description, publishPath, version, thumbnailPath, rvPlayblast, sgPlayblast, upload)
+								result = sgUtils.sgCreateShotVersion2(projName, entityID, taskID, name, status, description, publishPath, version, thumbnailPath, rvPlayblast, sgPlayblast, upload)
 
 								hook.log(result)
 								hook.log('Create version for %s success' % entityName)
