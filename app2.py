@@ -776,7 +776,7 @@ class MyForm(QtGui.QMainWindow):
 			'''
 			# to enable update status, comment line below
 			self.setProgress('Skip updating task status', '', result)
-			
+
 			self.setProgressbar(self.progressIncrement, True)
 
 
@@ -868,6 +868,7 @@ class MyForm(QtGui.QMainWindow):
 			taskData = sgUtils.sgGetShotTaskID(projName, sequence, shotName, taskName) 
 			taskID = taskData['id']
 			self.entityInfo = taskData['entity']
+			self.taskName = taskName
 
 			return taskID
 
@@ -923,6 +924,7 @@ class MyForm(QtGui.QMainWindow):
 		projName = self.info['project']
 		# taskID from update task status
 		taskID = self.taskID
+		taskName = self.taskName
 
 		# linked to entity ID -> assetID/shotID from update task status
 		entityID = self.entityInfo['id']
@@ -1017,6 +1019,8 @@ class MyForm(QtGui.QMainWindow):
 						for each in self.layoutShotInfo : 
 							entityName = each['shotName']
 							entityID = each['id']
+							shotName = each['shotCode']
+							sequence = each['sequence']
 							taskID = None
 							rvPlayblast = None
 							sgPlayblast = None
@@ -1037,6 +1041,9 @@ class MyForm(QtGui.QMainWindow):
 								upload = True
 
 							if createVersion : 
+								taskData = sgUtils.sgGetShotTaskID(projName, sequence, shotName, taskName) 
+								taskID = taskData['id']
+
 								self.setStatusUI('Create version for %s' % entityName, '', True, True, True)
 
 								hook.logList(['projName : %s' % projName, 'entityID : %s' % entityID, 'taskID : %s' % taskID, 
@@ -1302,7 +1309,7 @@ class MyForm(QtGui.QMainWindow):
 					sgExists = True
 
 				# info into dict
-				tempDict = {'rvPlayblast': playblastFile, 'rvExists': exists, 'sgPlayblast': sgPlayblastFile, 'sgExists': sgExists, 'shotName': shotName, 'id': each['id']}
+				tempDict = {'rvPlayblast': playblastFile, 'rvExists': exists, 'sgPlayblast': sgPlayblastFile, 'sgExists': sgExists, 'shotName': shotName, 'id': each['id'], 'shotCode': each['name'], 'sequence': self.info['sequence']}
 				layoutShotInfo.append(tempDict)
 
 
