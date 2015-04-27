@@ -11,6 +11,11 @@
 # add status
 # add progress bar
 
+# v.1.0.7
+# add layout task
+# publish all shots to cam_pose task and versions
+# remove status change for the task
+
 #Import python modules
 import sys, os, re, shutil, random
 import subprocess
@@ -765,7 +770,13 @@ class MyForm(QtGui.QMainWindow):
 			self.setStatusUI('Setting Shotgun Status')
 			result = self.updateTaskStatus()
 
-			self.setProgress('Update Task status', '', result)
+			# coordinator request to remove update status, 
+			# to enable it remove the quote below 
+			'''self.setProgress('Update Task status', '', result)
+			'''
+			# to enable update status, comment line below
+			self.setProgress('Skip updating task status', '', result)
+			
 			self.setProgressbar(self.progressIncrement, True)
 
 
@@ -890,8 +901,12 @@ class MyForm(QtGui.QMainWindow):
 				try : 
 					data = {'sg_status_list': status, 'sg_path': {'local_path': publishFile, 'name': 'MayaFile'}}
 
-					result = sgUtils.updateTask(taskID, data)
+					# coordinator request to remove update status
+					# to enable task status changes, remove quote below 
+					'''result = sgUtils.updateTask(taskID, data)
 					self.setStatusUI('Update status successful')
+					'''
+					self.setStatusUI('Skip updating task status')
 
 
 				except : 
