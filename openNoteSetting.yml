@@ -1,0 +1,18 @@
+anim:
+  permissionGroup:
+  - Manager Animation
+  user:
+  - kui_user
+  - Hannes Reindl
+layout:
+  permissionGroup:
+  - Manager Layout
+  user:
+  - kui_user
+  - Hannes Reindl
+asset:
+  permissionGroup:
+  - Manager Asset
+  user:
+  - kui_user
+  - Hannes Reindl

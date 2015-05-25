@@ -97,6 +97,8 @@ class MyForm(QtGui.QMainWindow):
 
 		# config variable
 		self.configData = dict()
+		self.asset = 'assets'
+		self.shot = 'episodes'
 
 		# status variable
 		self.statusColor = [0, 0, 160]
@@ -107,7 +109,7 @@ class MyForm(QtGui.QMainWindow):
 
 
 		# set window title
-		self.windowTitle = 'Arxanima Asset Publish v.1.0.6'
+		self.windowTitle = 'Arxanima Asset Publish v.1.0.7'
 		self.setWindowTitle(self.windowTitle)
 		self.ui.progressBar.setVisible(False)
 		
@@ -228,7 +230,7 @@ class MyForm(QtGui.QMainWindow):
 		if len(sceneElements) > 1 : 
 			entity = sceneElements[1]
 
-			if entity == 'assets' and len(sceneElements) == 9 : 
+			if entity == self.asset and len(sceneElements) == 9 : 
 				projectLocal = sceneElements[0]
 				workType = sceneElements[2]
 				assetType = sceneElements[3]
@@ -263,7 +265,7 @@ class MyForm(QtGui.QMainWindow):
 					return info
 
 			# if len = 9 assume that it's anim
-			if entity == 'episodes' and len(sceneElements) == 9 : 
+			if entity == self.shot and len(sceneElements) == 9 : 
 				# 'ttv/episodes/p101/work/sq010/sh020/anim/maya/ttv_p101_010_020_anim.v002.ma'
 				projectLocal = sceneElements[0]
 				episode = sceneElements[2]
@@ -295,7 +297,7 @@ class MyForm(QtGui.QMainWindow):
 
 
 			# if len = 8 assume that it's layout
-			if entity == 'episodes' and len(sceneElements) == 8 : 
+			if entity == self.shot and len(sceneElements) == 8 : 
 				# 'ttv/episodes/p101/work/sq010/layout/maya/ttv_p101_010_020_anim.v002.ma'
 				projectLocal = sceneElements[0]
 				episode = sceneElements[2]
@@ -356,7 +358,7 @@ class MyForm(QtGui.QMainWindow):
 		self.setWorkMode()
 		self.setupProgressBar()
 
-		if entity == 'assets' : 
+		if entity == self.asset : 
 			self.setEntityType('entity')
 			self.setProject()
 			self.setInfo1('Type', 'assetType')
@@ -371,7 +373,7 @@ class MyForm(QtGui.QMainWindow):
 			self.ui.task_comboBox.setVisible(False)
 
 		
-		if entity == 'episodes' : 
+		if entity == self.shot : 
 			self.setEntityType('department')
 			self.setProject()
 			self.setInfo1('Episode', 'episode')
@@ -777,6 +779,9 @@ class MyForm(QtGui.QMainWindow):
 			# to enable update status, comment line below
 			self.setProgress('Skip updating task status', '', result)
 
+			# create note 
+			self.createNote()
+
 			self.setProgressbar(self.progressIncrement, True)
 
 
@@ -795,7 +800,7 @@ class MyForm(QtGui.QMainWindow):
 	def updateTaskStatus(self) : 
 		# get taskID
 
-		if self.info['entity'] == 'assets' : 
+		if self.info['entity'] == self.asset : 
 			self.taskID = self.getAssetTaskID()
 
 			if self.taskID : 
@@ -806,7 +811,7 @@ class MyForm(QtGui.QMainWindow):
 			else : 
 				self.setStatusUI('No TaskID', 'error')
 
-		if self.info['entity'] == 'episodes' : 
+		if self.info['entity'] == self.shot : 
 			self.taskID = self.getShotTaskID()
 
 			if self.taskID : 
@@ -816,6 +821,62 @@ class MyForm(QtGui.QMainWindow):
 
 			else : 
 				self.setStatusUI('No TaskID', 'error')
+
+
+
+	def createNote(self) : 
+
+		projName = self.info['project']
+		sequence = self.info['sequence']
+
+		# taskID from update task status
+		taskID = self.taskID
+		taskName = self.taskName
+
+		# shotID / assetID
+		entityID = self.entityInfo['id']
+		entityName = self.entityInfo['name']
+		entityType = self.entityInfo['type']
+
+		noteLinksEntity = []
+
+		if entityID and taskID : 
+
+			# linked entity 
+			noteLinksEntity = [{'type': entityType, 'id': entityID}]
+			tasks = [{'type': 'Task', 'id': taskID}]
+
+			# if department is LAYOUT 
+			# link to all task and all shot in the sequence
+			if self.info['entity'] == self.shot : 
+				if self.info['department'] == 'layout' : 
+					
+					for eachShot in self.layoutShotInfo : 
+						shotID = eachShot['id']
+						noteLinksEntity.append({'type': entityType, 'id': shotID})
+
+					tasks = sgUtils.getShotTaskSequence(projName, sequence, 'LAYOUT')
+
+
+			# receiver entity 
+			userName = 'kui_user'
+			user = sgUtils.sgFindUserEntity(userName)
+			receiversEntity = [user]
+
+			# content 
+			description = str(self.ui.comment_textEdit.toPlainText())
+			subject = 'Publish on %s : ' % entityName
+			content = description
+
+			if description : 
+				result = sgUtils.sgCreateNoteTask(projName, noteLinksEntity, receiversEntity, tasks, subject, content)
+
+				self.setProgress('Create Note', '', result)
+				self.setProgressbar(self.progressIncrement, True)
+
+				return result
+
+
 
 
 	def getAssetTaskID(self) : 
@@ -832,6 +893,7 @@ class MyForm(QtGui.QMainWindow):
 			self.setStatusUI('Geting taskID...')
 			taskID = taskData['id']
 			self.entityInfo = taskData['entity']
+			self.taskName = taskName
 
 			return taskID
 
@@ -958,7 +1020,7 @@ class MyForm(QtGui.QMainWindow):
 			thumbnailPath = previewFile
 
 
-		if self.info['entity'] == 'assets' : 
+		if self.info['entity'] == self.asset : 
 			# logging
 			self.setStatusUI('Create version for Assets', '', True, True, True)
 			hook.logList(['projName : %s' % projName, 'entityID : %s' % entityID, 'taskID : %s' % taskID, 
@@ -979,7 +1041,7 @@ class MyForm(QtGui.QMainWindow):
 
 
 
-		if self.info['entity'] == 'episodes' : 
+		if self.info['entity'] == self.shot : 
 			if self.info['department'] == 'anim' : 
 				if self.ui.playblast_checkBox.isChecked() : 
 					if self.playblastVersion : 
@@ -1134,12 +1196,12 @@ class MyForm(QtGui.QMainWindow):
 	def getPublishPath(self) : 
 		rootPath = self.getConfigRootPath()
 
-		if self.info['entity'] == 'assets' : 
+		if self.info['entity'] == self.asset : 
 			publishPath = os.path.join(rootPath, self.info['projectLocal'], self.info['entity'], self.publishDir, self.info['assetType'], self.info['parent'], self.info['variation'], self.info['task'], self.info['software']).replace('\\', '/')
 
 			return publishPath
 
-		if self.info['entity'] == 'episodes' : 
+		if self.info['entity'] == self.shot : 
 			if self.info['department'] == 'layout' : 
 				publishPath = os.path.join(rootPath, self.info['projectLocal'], self.info['entity'], self.info['episode'], self.publishDir, self.info['sequence'], self.info['taskName'], self.info['software']).replace('\\', '/')
 
@@ -1178,11 +1240,12 @@ class MyForm(QtGui.QMainWindow):
 
 	def getWorkPath(self) : 
 		rootPath = self.getConfigRootPath()
+		workPath = str()
 
-		if self.info['entity'] == 'assets' : 
+		if self.info['entity'] == self.asset : 
 			workPath = os.path.join(rootPath, self.info['projectLocal'], self.info['entity'], self.workDir, self.info['assetType'], self.info['parent'], self.info['variation'], self.info['task'], self.info['software']).replace('\\', '/')
 
-		if self.info['entity'] == 'episodes' : 
+		if self.info['entity'] == self.shot : 
 			if self.info['department'] == 'layout' : 
 				# 'ttv/episodes/p101/work/sq010/sh020/anim/maya/ttv_p101_010_020_anim.v002.ma'
 				workPath = os.path.join(rootPath, self.info['projectLocal'], self.info['entity'], self.info['episode'], self.workDir, self.info['sequence'], self.info['department'], self.info['software']).replace('\\', '/')
@@ -1209,10 +1272,10 @@ class MyForm(QtGui.QMainWindow):
 		dirInfo = {'work': self.workDir, 'publish': self.publishDir}
 		rootPath = self.getConfigRootPath()
 
-		if self.info['entity'] == 'assets' : 
+		if self.info['entity'] == self.asset : 
 			snapshotPath = os.path.join(rootPath, self.info['projectLocal'], self.info['entity'], dirInfo[mode], self.info['assetType'], self.info['parent'], self.info['variation'], self.info['task'], self.info['software'], self.snapshotDir).replace('\\', '/')
 
-		if self.info['entity'] == 'episodes' : 
+		if self.info['entity'] == self.shot : 
 			if self.info['department'] == 'layout' : 
 				snapshotPath = os.path.join(rootPath, self.info['projectLocal'], self.info['entity'], self.info['episode'], dirInfo[mode], self.info['sequence'], self.info['taskName'], self.info['software'], self.snapshotDir).replace('\\', '/')
 
@@ -1402,7 +1465,7 @@ class MyForm(QtGui.QMainWindow):
 		project = self.info['projectLocal']
 
 		# naming for assets 
-		if self.info['entity'] == 'assets' : 
+		if self.info['entity'] == self.asset : 
 			assetType = self.info['assetType']
 			parent = self.info['parent']
 			variation = self.info['variation']
@@ -1413,7 +1476,7 @@ class MyForm(QtGui.QMainWindow):
 
 			return fileName
 
-		if self.info['entity'] == 'episodes' : 
+		if self.info['entity'] == self.shot : 
 			episode = self.info['episode']
 			sequence = self.removeString(self.info['sequence'])
 			shot = self.removeString(self.info['shot'])
