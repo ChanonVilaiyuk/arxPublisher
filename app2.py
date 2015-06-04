@@ -827,7 +827,7 @@ class MyForm(QtGui.QMainWindow):
 	def createNote(self) : 
 
 		projName = self.info['project']
-		sequence = self.info['sequence']
+		# sequence = self.info['sequence']
 
 		# taskID from update task status
 		taskID = self.taskID
@@ -840,6 +840,8 @@ class MyForm(QtGui.QMainWindow):
 
 		noteLinksEntity = []
 
+		note = True
+
 		if entityID and taskID : 
 
 			# linked entity 
@@ -850,32 +852,52 @@ class MyForm(QtGui.QMainWindow):
 			# link to all task and all shot in the sequence
 			if self.info['entity'] == self.shot : 
 				if self.info['department'] == 'layout' : 
-					
-					for eachShot in self.layoutShotInfo : 
-						shotID = eachShot['id']
-						noteLinksEntity.append({'type': entityType, 'id': shotID})
+					# get sequence ID by find its link sequence
+					shotID = entityID 
+					sequenceInfo = self.getSequenceInfo(shotID)
 
-					tasks = sgUtils.getShotTaskSequence(projName, sequence, 'LAYOUT')
+					if sequenceInfo : 
+						sequenceEntity = sequenceInfo['sg_sequence']
+						entityType = sequenceEntity['type']
+						sequenceID = sequenceEntity['id']
+						noteLinksEntity = [{'type': entityType, 'id': sequenceID}]
+
+						tasks = sgUtils.sgFindTaskFromLinkEntity(sequenceEntity, 'LAYOUT', [])
+
+						if not tasks : 
+							note = False
 
 
 			# receiver entity 
-			userName = 'kui_user'
-			user = sgUtils.sgFindUserEntity(userName)
-			receiversEntity = [user]
+			# userName = 'kui_user'
+			# user = sgUtils.sgFindUserEntity(userName)
+			permissionSet = self.getNoteReceiver()
+
+			# receiversEntity = [user]
+			receiversEntity = sgUtils.sgFindUserByPermission(permissionSet)
 
 			# content 
 			description = str(self.ui.comment_textEdit.toPlainText())
 			subject = 'Publish on %s : ' % entityName
 			content = description
 
+			# create note if description has value
 			if description : 
-				result = sgUtils.sgCreateNoteTask(projName, noteLinksEntity, receiversEntity, tasks, subject, content)
 
-				self.setProgress('Create Note', '', result)
-				self.setProgressbar(self.progressIncrement, True)
+				# only create note if task has data
+				if note : 
+					# print projName, noteLinksEntity, receiversEntity, tasks, subject, content
+					result = sgUtils.sgCreateNoteTask(projName, noteLinksEntity, receiversEntity, tasks, subject, content)
+					print receiversEntity
 
-				return result
+					self.setProgress('Create Note', '', result)
+					self.setProgressbar(self.progressIncrement, True)
 
+					return result
+
+				else : 
+					self.setProgress('', 'Failed : No note created', False, True, 'failed')
+					print 'Failed : Create note. Sequence task not found, no note created'
 
 
 
@@ -950,6 +972,30 @@ class MyForm(QtGui.QMainWindow):
 		return shotName
 
 
+	def getSequenceInfo(self, shotID) : 
+		fields = ['sg_sequence']
+		sequenceInfo = sgUtils.sgGetShotInfo(shotID, fields)
+
+		return sequenceInfo
+
+
+
+	def getNoteReceiver(self) : 
+
+		permissionGroup = ''
+		
+		if self.info['entity'] == self.asset : 
+			permissionGroup = 'Manager Asset'
+
+		if self.info['entity'] == self.shot : 
+
+			if self.info['department'] == 'anim' : 
+				permissionGroup = 'Manager Animation' 
+
+			if self.info['department'] == 'layout' : 
+				permissionGroup = 'Manager Layout'
+
+		return permissionGroup
 
 	def updateTask(self, taskID) : 
 		# update task status and upload path
